@@ -25,18 +25,14 @@ class Lexer(object):
     '=', '+', '-', '*', '/', '(', ')', ';'
   ]
 
-  # Token Definitions #
+  # Token Definitions
 
+  t_CHARACTER = "'[a-zA-Z]'"
   t_INSERT = r'<<'
 
   def t_ID(self, t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
     t.type = self.reserved.get(t.value,'ID')
-    return t
-
-  def t_CHARACTER(self, t):
-    r"'[^\\']'"
-    t.value = t.value[1]
     return t
 
   def t_NUM(self, t):
