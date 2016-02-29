@@ -12,7 +12,7 @@ class Parser(object):
   precedence = (
     ('left','INSERT'), # and EXTRACT
     ('left','+','-'),
-    ('left','*','/'),
+    ('left','*','/','%'),
     ('right','UMINUS')
   )
 
@@ -23,6 +23,14 @@ class Parser(object):
   def p_statement_decl_assign(self, p):
     'statement : declaration ID "=" expression ";"'
     self.headsym.put(p[2], p[1], p[4])
+  
+  def p_statement_decl_assign_char(self, p):
+    'statement : declaration ID "=" "\'" CHARACTER "\'" ";"'
+    self.headsym.put(p[2], p[1], p[5])
+  
+  def p_statement_decl_assign_str(self, p):
+    '''statement : declaration ID '=' '\"' ID '\"' ';' '''
+    self.headsym.put(p[2], p[1], p[5])
 
   def p_statement_cout(self, p):
     'statement : COUT INSERT expression ";"'
@@ -37,18 +45,21 @@ class Parser(object):
                    | DOUBLE
                    | FLOAT
                    | CHAR
-                   | BOOL'''
+                   | BOOL
+                   | STRING'''
     p[0] = p[1]
 
   def p_expression_binop(self, p):
     '''expression : expression '+' expression
                   | expression '-' expression
                   | expression '*' expression
-                  | expression '/' expression'''
+                  | expression '/' expression
+                  | expression '%' expression'''
     if p[2] == '+':    p[0] = p[1] + p[3]
     elif p[2] == '-':  p[0] = p[1] - p[3]
     elif p[2] == '*':  p[0] = p[1] * p[3]
     elif p[2] == '/':  p[0] = p[1] / p[3]
+    elif p[2] == '%':  p[0] = p[1] % p[3]
 
   def p_expression_uminus(self, p):
     "expression : '-' expression %prec UMINUS"

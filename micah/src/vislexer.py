@@ -14,7 +14,8 @@ class Lexer(object):
     'float'  : 'FLOAT',
     'char'   : 'CHAR',
     'bool'   : 'BOOL',
-    'cout'   : 'COUT'
+    'cout'   : 'COUT',
+    'string' : 'STRING'
   }
 
   tokens = [
@@ -22,7 +23,7 @@ class Lexer(object):
   ] + list(reserved.values())
 
   literals = [
-    '=', '+', '-', '*', '/', '(', ')', ';'
+    '=','+','-','*','/','%','(', ')',';','\'','\"'
   ]
 
   # Token Definitions #
