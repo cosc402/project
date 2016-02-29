@@ -1,0 +1,32 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{fullpage}
+\title{C++ Visualizer: \\ C++ Interpreter BNF Grammar}
+\author{Connor Minton}
+\date{February 26, 2016}
+
+\begin{document}
+
+\maketitle
+This document defines the full specification for the BNF grammar used by the interpreter.
+
+\section{C++ Interpreter BNF Grammar}
+\begin{align*}
+statement \quad & \to \quad \mathbf{ID} \ =\ expression\ ; \\
+							& \quad | \quad declaration \ \mathbf{ID}\ =\ expression\ ; \\
+							& \quad | \quad \mathbf{COUT}\ \mathbf{INSERT}\ expression\ ; \\
+							& \quad | \quad declaration\ \mathbf{ID}\ ; \\\\
+declaration \quad & \to \quad \mathbf{INT} \\
+							& \quad | \quad \mathbf{DOUBLE} \\
+							& \quad | \quad \mathbf{FLOAT} \\
+							& \quad | \quad \mathbf{CHAR} \\
+							& \quad | \quad \mathbf{BOOL} \\\\
+expression \quad & \to \quad -\ expression \\
+							& \quad | \quad ( \ expression\ )\\
+							& \quad | \quad \mathbf{NUM}\\
+							& \quad | \quad \mathbf{CHARACTER}\\
+							& \quad | \quad \mathbf{ID}
+\end{align*}
+
+\end{document}
