@@ -11,7 +11,7 @@ class Parser(object):
 
   precedence = (
     ('left','INSERT'), # and EXTRACT
-    ('left','+','-'),
+    ('left','+','-', 'INCREMENT'),
     ('left','*','/','%'),
     ('right','UMINUS')
   )
@@ -35,16 +35,20 @@ class Parser(object):
   def p_statement_cout(self, p):
     'statement : COUT out ";"'
   
+  def p_statement_decl(self, p):
+    'statement : declaration ID ";"'
+    self.headsym.put(p[2], p[1], None)
+  
+  def p_expression_inc(self, p):
+    "statement : ID INCREMENT ';'"
+    self.headsym.update(p[1],self.headsym.get(p[1]).value + 1)
+  
   def p_out_rec(self, p):
     'out : out out'
 
   def p_out(self, p):
     'out : INSERT expression'
     print(p[2])
-
-  def p_statement_decl(self, p):
-    'statement : declaration ID ";"'
-    self.headsym.put(p[2], p[1], None)
 
   def p_decl_var(self, p):
     '''declaration : INT
