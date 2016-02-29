@@ -33,8 +33,14 @@ class Parser(object):
     self.headsym.put(p[2], p[1], p[5])
 
   def p_statement_cout(self, p):
-    'statement : COUT INSERT expression ";"'
-    print(p[3])
+    'statement : COUT out ";"'
+  
+  def p_out_rec(self, p):
+    'out : out out'
+
+  def p_out(self, p):
+    'out : INSERT expression'
+    print(p[2])
 
   def p_statement_decl(self, p):
     'statement : declaration ID ";"'

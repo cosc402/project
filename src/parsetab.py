@@ -5,9 +5,9 @@ _tabversion = '3.8'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'C338FF1908F7D48019E9261F5A2F46E2'
+_lr_signature = '317D5C2052C2E16EB014B554155A0062'
     
-_lr_action_items = {'COUT':([0,],[1,]),'CHARACTER':([11,13,15,16,20,25,26,27,28,29,32,],[14,14,14,14,14,14,14,14,14,14,42,]),'CHAR':([0,],[5,]),'INSERT':([1,],[11,]),'"':([20,41,],[31,44,]),'%':([14,17,18,19,22,23,24,33,35,36,37,38,39,40,],[-21,-20,25,-22,25,25,-18,25,-19,-17,25,-15,25,-16,]),"'":([20,42,],[32,45,]),')':([14,17,19,23,24,35,36,37,38,39,40,],[-21,-20,-22,35,-18,-19,-17,-13,-15,-14,-16,]),'(':([11,13,15,16,20,25,26,27,28,29,],[15,15,15,15,15,15,15,15,15,15,]),'+':([14,17,18,19,22,23,24,33,35,36,37,38,39,40,],[-21,-20,26,-22,26,26,-18,26,-19,-17,-13,-15,-14,-16,]),'*':([14,17,18,19,22,23,24,33,35,36,37,38,39,40,],[-21,-20,27,-22,27,27,-18,27,-19,-17,27,-15,27,-16,]),'-':([11,13,14,15,16,17,18,19,20,22,23,24,25,26,27,28,29,33,35,36,37,38,39,40,],[16,16,-21,16,16,-20,28,-22,16,28,28,-18,16,16,16,16,16,28,-19,-17,-13,-15,-14,-16,]),'/':([14,17,18,19,22,23,24,33,35,36,37,38,39,40,],[-21,-20,29,-22,29,29,-18,29,-19,-17,29,-15,29,-16,]),'NUM':([11,13,15,16,20,25,26,27,28,29,],[17,17,17,17,17,17,17,17,17,17,]),';':([12,14,17,18,19,22,24,33,35,36,37,38,39,40,44,45,],[21,-21,-20,30,-22,34,-18,43,-19,-17,-13,-15,-14,-16,46,47,]),'=':([9,12,],[13,20,]),'$end':([7,21,30,34,43,46,47,],[0,-6,-5,-1,-2,-4,-3,]),'STRING':([0,],[10,]),'ID':([0,2,3,4,5,6,8,10,11,13,15,16,20,25,26,27,28,29,31,],[9,-8,-7,-9,-10,-11,12,-12,19,19,19,19,19,19,19,19,19,19,41,]),'INT':([0,],[3,]),'DOUBLE':([0,],[2,]),'FLOAT':([0,],[4,]),'BOOL':([0,],[6,]),}
+_lr_action_items = {'COUT':([0,],[1,]),'CHARACTER':([11,14,16,17,23,28,29,30,31,32,34,],[15,15,15,15,15,15,15,15,15,15,44,]),'CHAR':([0,],[5,]),'INSERT':([1,12,15,18,19,20,22,27,37,38,39,40,41,42,],[11,11,-23,-22,-7,-24,11,-20,-21,-19,-15,-17,-16,-18,]),'"':([23,43,],[33,46,]),'%':([15,18,19,20,25,26,27,35,37,38,39,40,41,42,],[-23,-22,28,-24,28,28,-20,28,-21,-19,28,-17,28,-18,]),"'":([23,44,],[34,47,]),')':([15,18,20,26,27,37,38,39,40,41,42,],[-23,-22,-24,37,-20,-21,-19,-15,-17,-16,-18,]),'(':([11,14,16,17,23,28,29,30,31,32,],[16,16,16,16,16,16,16,16,16,16,]),'+':([15,18,19,20,25,26,27,35,37,38,39,40,41,42,],[-23,-22,29,-24,29,29,-20,29,-21,-19,-15,-17,-16,-18,]),'*':([15,18,19,20,25,26,27,35,37,38,39,40,41,42,],[-23,-22,30,-24,30,30,-20,30,-21,-19,30,-17,30,-18,]),'-':([11,14,15,16,17,18,19,20,23,25,26,27,28,29,30,31,32,35,37,38,39,40,41,42,],[17,17,-23,17,17,-22,31,-24,17,31,31,-20,17,17,17,17,17,31,-21,-19,-15,-17,-16,-18,]),'/':([15,18,19,20,25,26,27,35,37,38,39,40,41,42,],[-23,-22,32,-24,32,32,-20,32,-21,-19,32,-17,32,-18,]),'NUM':([11,14,16,17,23,28,29,30,31,32,],[18,18,18,18,18,18,18,18,18,18,]),';':([12,13,15,18,19,20,22,25,27,35,37,38,39,40,41,42,46,47,],[21,24,-23,-22,-7,-24,-6,36,-20,45,-21,-19,-15,-17,-16,-18,48,49,]),'=':([10,13,],[14,23,]),'$end':([8,21,24,36,45,48,49,],[0,-5,-8,-1,-2,-4,-3,]),'STRING':([0,],[6,]),'ID':([0,2,3,4,5,6,7,9,11,14,16,17,23,28,29,30,31,32,33,],[10,-10,-9,-11,-12,-14,-13,13,20,20,20,20,20,20,20,20,20,20,43,]),'INT':([0,],[3,]),'DOUBLE':([0,],[2,]),'FLOAT':([0,],[4,]),'BOOL':([0,],[7,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([11,13,15,16,20,25,26,27,28,29,],[18,22,23,24,33,36,37,38,39,40,]),'statement':([0,],[7,]),'declaration':([0,],[8,]),}
+_lr_goto_items = {'out':([1,12,22,],[12,22,22,]),'expression':([11,14,16,17,23,28,29,30,31,32,],[19,25,26,27,35,38,39,40,41,42,]),'statement':([0,],[8,]),'declaration':([0,],[9,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -30,22 +30,24 @@ _lr_productions = [
   ('statement -> declaration ID = expression ;','statement',5,'p_statement_decl_assign','visparser.py',24),
   ("statement -> declaration ID = ' CHARACTER ' ;",'statement',7,'p_statement_decl_assign_char','visparser.py',28),
   ('statement -> declaration ID = " ID " ;','statement',7,'p_statement_decl_assign_str','visparser.py',32),
-  ('statement -> COUT INSERT expression ;','statement',4,'p_statement_cout','visparser.py',36),
-  ('statement -> declaration ID ;','statement',3,'p_statement_decl','visparser.py',40),
-  ('declaration -> INT','declaration',1,'p_decl_var','visparser.py',44),
-  ('declaration -> DOUBLE','declaration',1,'p_decl_var','visparser.py',45),
-  ('declaration -> FLOAT','declaration',1,'p_decl_var','visparser.py',46),
-  ('declaration -> CHAR','declaration',1,'p_decl_var','visparser.py',47),
-  ('declaration -> BOOL','declaration',1,'p_decl_var','visparser.py',48),
-  ('declaration -> STRING','declaration',1,'p_decl_var','visparser.py',49),
-  ('expression -> expression + expression','expression',3,'p_expression_binop','visparser.py',53),
-  ('expression -> expression - expression','expression',3,'p_expression_binop','visparser.py',54),
-  ('expression -> expression * expression','expression',3,'p_expression_binop','visparser.py',55),
-  ('expression -> expression / expression','expression',3,'p_expression_binop','visparser.py',56),
-  ('expression -> expression % expression','expression',3,'p_expression_binop','visparser.py',57),
-  ('expression -> - expression','expression',2,'p_expression_uminus','visparser.py',65),
-  ('expression -> ( expression )','expression',3,'p_expression_group','visparser.py',69),
-  ('expression -> NUM','expression',1,'p_expression_number','visparser.py',73),
-  ('expression -> CHARACTER','expression',1,'p_expression_character','visparser.py',77),
-  ('expression -> ID','expression',1,'p_expression_id','visparser.py',81),
+  ('statement -> COUT out ;','statement',3,'p_statement_cout','visparser.py',36),
+  ('out -> out out','out',2,'p_out_rec','visparser.py',39),
+  ('out -> INSERT expression','out',2,'p_out','visparser.py',42),
+  ('statement -> declaration ID ;','statement',3,'p_statement_decl','visparser.py',46),
+  ('declaration -> INT','declaration',1,'p_decl_var','visparser.py',50),
+  ('declaration -> DOUBLE','declaration',1,'p_decl_var','visparser.py',51),
+  ('declaration -> FLOAT','declaration',1,'p_decl_var','visparser.py',52),
+  ('declaration -> CHAR','declaration',1,'p_decl_var','visparser.py',53),
+  ('declaration -> BOOL','declaration',1,'p_decl_var','visparser.py',54),
+  ('declaration -> STRING','declaration',1,'p_decl_var','visparser.py',55),
+  ('expression -> expression + expression','expression',3,'p_expression_binop','visparser.py',59),
+  ('expression -> expression - expression','expression',3,'p_expression_binop','visparser.py',60),
+  ('expression -> expression * expression','expression',3,'p_expression_binop','visparser.py',61),
+  ('expression -> expression / expression','expression',3,'p_expression_binop','visparser.py',62),
+  ('expression -> expression % expression','expression',3,'p_expression_binop','visparser.py',63),
+  ('expression -> - expression','expression',2,'p_expression_uminus','visparser.py',71),
+  ('expression -> ( expression )','expression',3,'p_expression_group','visparser.py',75),
+  ('expression -> NUM','expression',1,'p_expression_number','visparser.py',79),
+  ('expression -> CHARACTER','expression',1,'p_expression_character','visparser.py',83),
+  ('expression -> ID','expression',1,'p_expression_id','visparser.py',87),
 ]
