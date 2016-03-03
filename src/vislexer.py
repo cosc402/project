@@ -19,7 +19,8 @@ class Lexer(object):
   }
 
   tokens = [
-    'ID', 'NUM', 'CHARACTER', 'INSERT', 'INCREMENT'
+    'ID', 'NUM', 'CHARACTER', 'INSERT', 'INCREMENT','DECREMENT',
+    'PLUSEQUAL', 'MINUSEQUAL'
   ] + list(reserved.values())
 
   literals = [
@@ -29,8 +30,10 @@ class Lexer(object):
   # Token Definitions #
 
   t_INSERT = r'<<'
-
   t_INCREMENT = '\+\+'
+  t_DECREMENT = '\-\-'
+  t_PLUSEQUAL = '\+\='
+  t_MINUSEQUAL = '\-\='
 
   def t_ID(self, t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'

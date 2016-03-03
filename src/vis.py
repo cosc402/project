@@ -16,7 +16,7 @@ def main():
   while True:
     try:
       s = raw_input('test > ')
-      if s == 'quit()':
+      if s == 'quit':
         break
     except EOFError:
       break
