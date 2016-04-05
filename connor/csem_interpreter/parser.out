@@ -14,7 +14,7 @@ Rule 8     dcl -> type dclr
 Rule 9     dcl -> dcl , dclr
 Rule 10    dclr -> ID
 Rule 11    dclr -> ID [ ]
-Rule 12    dclr -> ID [ constant ]
+Rule 12    dclr -> ID [ ICON ]
 Rule 13    type -> CHAR
 Rule 14    type -> FLOAT
 Rule 15    type -> DOUBLE
@@ -115,7 +115,7 @@ FCON                 : 81
 FLOAT                : 14
 FOR                  : 33
 GEQ                  : 45
-ICON                 : 79
+ICON                 : 12 79
 ID                   : 10 11 12 19 20 72 73 76 77
 IF                   : 29 30
 INT                  : 16
@@ -143,7 +143,7 @@ args                 : 22 24
 block                : 38
 cexpr                : 29 30 31 32 41 48 48 49 49 50
 cexpro               : 33
-constant             : 12 75
+constant             : 75
 dcl                  : 4 7 9
 dclr                 : 8 9 23 24
 dcls                 : 7 18
@@ -329,7 +329,7 @@ state 13
     (19) fname -> type . ID
     (10) dclr -> . ID
     (11) dclr -> . ID [ ]
-    (12) dclr -> . ID [ constant ]
+    (12) dclr -> . ID [ ICON ]
 
     ID              shift and go to state 20
 
@@ -421,7 +421,7 @@ state 16
     (9) dcl -> dcl , . dclr
     (10) dclr -> . ID
     (11) dclr -> . ID [ ]
-    (12) dclr -> . ID [ constant ]
+    (12) dclr -> . ID [ ICON ]
 
     ID              shift and go to state 45
 
@@ -467,7 +467,7 @@ state 20
     (19) fname -> type ID .
     (10) dclr -> ID .
     (11) dclr -> ID . [ ]
-    (12) dclr -> ID . [ constant ]
+    (12) dclr -> ID . [ ICON ]
 
     (               reduce using rule 19 (fname -> type ID .)
     ;               reduce using rule 10 (dclr -> ID .)
@@ -1063,7 +1063,7 @@ state 45
 
     (10) dclr -> ID .
     (11) dclr -> ID . [ ]
-    (12) dclr -> ID . [ constant ]
+    (12) dclr -> ID . [ ICON ]
 
     ;               reduce using rule 10 (dclr -> ID .)
     ,               reduce using rule 10 (dclr -> ID .)
@@ -1123,7 +1123,7 @@ state 49
     (23) args -> type . dclr
     (10) dclr -> . ID
     (11) dclr -> . ID [ ]
-    (12) dclr -> . ID [ constant ]
+    (12) dclr -> . ID [ ICON ]
 
     ID              shift and go to state 45
 
@@ -1132,19 +1132,11 @@ state 49
 state 50
 
     (11) dclr -> ID [ . ]
-    (12) dclr -> ID [ . constant ]
-    (78) constant -> . SCON
-    (79) constant -> . ICON
-    (80) constant -> . CCON
-    (81) constant -> . FCON
+    (12) dclr -> ID [ . ICON ]
 
-    ]               shift and go to state 85
-    SCON            shift and go to state 40
-    ICON            shift and go to state 30
-    CCON            shift and go to state 28
-    FCON            shift and go to state 39
+    ]               shift and go to state 84
+    ICON            shift and go to state 85
 
-    constant                       shift and go to state 84
 
 state 51
 
@@ -2333,18 +2325,18 @@ state 83
 
 state 84
 
-    (12) dclr -> ID [ constant . ]
-
-    ]               shift and go to state 116
-
-
-state 85
-
     (11) dclr -> ID [ ] .
 
     ;               reduce using rule 11 (dclr -> ID [ ] .)
     ,               reduce using rule 11 (dclr -> ID [ ] .)
     )               reduce using rule 11 (dclr -> ID [ ] .)
+
+
+state 85
+
+    (12) dclr -> ID [ ICON . ]
+
+    ]               shift and go to state 116
 
 
 state 86
@@ -3183,7 +3175,7 @@ state 114
     (8) dcl -> type . dclr
     (10) dclr -> . ID
     (11) dclr -> . ID [ ]
-    (12) dclr -> . ID [ constant ]
+    (12) dclr -> . ID [ ICON ]
 
     ID              shift and go to state 45
 
@@ -3194,7 +3186,7 @@ state 115
     (24) args -> args , type . dclr
     (10) dclr -> . ID
     (11) dclr -> . ID [ ]
-    (12) dclr -> . ID [ constant ]
+    (12) dclr -> . ID [ ICON ]
 
     ID              shift and go to state 45
 
@@ -3202,11 +3194,11 @@ state 115
 
 state 116
 
-    (12) dclr -> ID [ constant ] .
+    (12) dclr -> ID [ ICON ] .
 
-    ;               reduce using rule 12 (dclr -> ID [ constant ] .)
-    ,               reduce using rule 12 (dclr -> ID [ constant ] .)
-    )               reduce using rule 12 (dclr -> ID [ constant ] .)
+    ;               reduce using rule 12 (dclr -> ID [ ICON ] .)
+    ,               reduce using rule 12 (dclr -> ID [ ICON ] .)
+    )               reduce using rule 12 (dclr -> ID [ ICON ] .)
 
 
 state 117

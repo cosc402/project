@@ -1,0 +1,309 @@
+ 
+	
+
+
+
+class nfa2dfa {
+private:
+	enum {EPSILON = 'E'};
+		
+			
+	class fsa {
+	public:
+		fsa();
+		~fsa();
+
+		nfa2dfa *language;
+						
+		int start;
+			
+		vector<int> end;
+			
+		map<int, map<char, vector<int> > > transitions;
+					
+		int numstates;
+					
+		vector<int> eclosure(vector<int> nodes);
+			
+		void add_to_state(int id, char input, int nextid);
+									
+		void print();
+				};
+
+public:
+	nfa2dfa() {
+		nfa.language = this;
+		dfa.language = this;
+	}
+	~nfa2dfa();
+
+private:
+	fsa nfa;		fsa dfa;	
+	vector<char> inputs;
+				
+public:
+	void add_to_nfa(int id, char input, int nextid) {
+		nfa.add_to_state(id, input, nextid);
+	}	
+	void add_to_dfa(int id, char input, int nextid) {
+		dfa.add_to_state(id, input, nextid);
+	}	
+	void add_final(int id);
+		
+	void set_numstates(int n) {nfa.numstates = n;}
+
+	void set_initial(int id) {nfa.start = id;}
+
+	void set_inputs(vector<char> v);
+		
+	void convert();
+				
+		void print_nfa() { nfa.print(); }
+	void print_dfa() { dfa.print(); }
+};
+
+ 
+
+
+nfa2dfa::fsa::fsa() { }
+
+nfa2dfa::fsa::~fsa() { }
+
+vector<int> nfa2dfa::fsa::eclosure(vector<int> nodes) {
+	stack<int> s;
+	vector<int>::iterator i=nodes.begin();
+	vector<int> ec_states;
+
+		for (int i=0; i<nodes.size(); i++)
+		ec_states.push_back(nodes[i]);
+
+		for (; i!=nodes.end(); ++i)
+		s.push(*i);
+
+
+	while (!s.empty()) {
+		int ext_node;
+		int cur_node = s.top();
+		s.pop();
+		vector<int> e_nodes;
+
+				for (int i=0; i<transitions[cur_node][EPSILON].size(); i++)
+			e_nodes.push_back(transitions[cur_node][EPSILON][i]);
+
+				for (int i=0; i<e_nodes.size(); i++) {
+						if (find(ec_states.begin(), ec_states.end(), e_nodes[i]) == ec_states.end()) {
+				ec_states.push_back(e_nodes[i]);
+				s.push(e_nodes[i]);
+			}
+		}
+	}
+
+	return ec_states;
+}
+
+void nfa2dfa::fsa::add_to_state(int id, char input, int nextid) {
+		if (transitions.find(id) == transitions.end()) {
+		transitions[id] = map<char, vector<int> >();
+	} 
+		if (transitions[id].find(input) == transitions[id].end()) {
+		transitions[id][input] = vector<int>();
+	}
+		transitions[id][input].push_back(nextid);
+}
+
+
+int connor;   int hello;
+
+nfa2dfa::~nfa2dfa() { }
+
+void nfa2dfa::add_final(int id) {
+	nfa.end.push_back(id);
+}
+
+void nfa2dfa::set_inputs(vector<char> v) {
+	for (int i=0; i<v.size(); i++)
+		inputs.push_back(v[i]);
+}
+
+void nfa2dfa::convert() {
+	int next_id = 1;
+	dfa.start = 1;
+	dfa.numstates = 0;
+	queue<int> unmarked;
+			map<int, vector<int> > dstate_to_nset;
+		
+		vector<char> real_inputs;
+	for (int i=0; i<inputs.size(); i++)
+		if (inputs[i] != EPSILON) real_inputs.push_back(inputs[i]);
+
+		{
+		vector<int> v_state;
+		v_state.push_back(nfa.start);
+		vector<int> v_close = nfa.eclosure(v_state);
+		sort(v_close.begin(), v_close.end());
+			
+						for (int j=0; j<nfa.end.size(); j++) {
+			if (find(v_close.begin(), v_close.end(), nfa.end[j])
+					!= v_close.end()) {
+				dfa.end.push_back(next_id);
+				break;
+			}
+		}
+
+		unmarked.push(next_id);
+		dstate_to_nset[next_id] = v_close;
+			
+		next_id++;
+		dfa.numstates++;
+	}
+
+	while (!unmarked.empty()) {
+		int cur_state = unmarked.front();
+		unmarked.pop();
+
+				for (int i=0; i < real_inputs.size(); i++) {
+			vector<int> nfa_states = dstate_to_nset[cur_state];
+				
+						set<int> set_move;
+			for (int j=0; j < nfa_states.size(); j++) {
+				vector<int> node_reach = nfa.transitions[nfa_states[j]][real_inputs[i]];
+				for (int k=0; k < node_reach.size(); k++) {
+					set_move.insert(node_reach[k]);
+				}
+			}
+
+						vector<int> v_move(set_move.size());
+			copy(set_move.begin(), set_move.end(), v_move.begin());
+			vector<int> v_close = nfa.eclosure(v_move);
+			sort(v_close.begin(), v_close.end());
+
+			if (v_close.empty()) continue;
+								
+						map<int, vector<int> >::iterator iter;
+			for (iter = dstate_to_nset.begin(); iter != dstate_to_nset.end(); ++iter) {
+				if (iter->second == v_close) break;
+			}
+
+						if (iter == dstate_to_nset.end()) {
+												for (int j=0; j<nfa.end.size(); j++) {
+					if (find(v_close.begin(), v_close.end(), nfa.end[j])
+							!= v_close.end()) {
+						dfa.end.push_back(next_id);
+						break;
+					}
+				}
+
+				unmarked.push(next_id);
+				dstate_to_nset[next_id] = v_close;
+				add_to_dfa(cur_state, real_inputs[i], next_id);
+									dfa.numstates++;
+				next_id++;
+			}
+			else {					add_to_dfa(cur_state, real_inputs[i], iter->first);
+			}
+		}
+	}
+}
+
+void nfa2dfa::fsa::print() {
+		cout << "Initial State:\t" << start << endl;
+	cout << "Final States:\t{";
+	for (int i=0; i<end.size(); i++) {
+		if (i!=0) cout << ",";
+		cout << end[i];
+	}
+	cout << "}" << endl;
+	cout << "Total States:\t" << numstates << endl;
+	
+		cout << left << setw(8) << "State";
+	for (int i=0; i<language->inputs.size(); i++)
+		cout << setw(15) << language->inputs[i];
+	cout << endl;
+	for (int state=1; state<=numstates; state++) {
+		cout << setw(8) << state;
+		for (int i=0; i<language->inputs.size(); i++) {
+			vector<int> v = transitions[state][language->inputs[i]];
+			stringstream ss;
+			ss << "{";
+			for (int j=0; j<v.size(); j++) {
+				if (j!=0) ss << ",";
+				ss << v[j];
+			}
+			ss << "}";
+			cout << setw(15) << ss.str();
+		}
+		cout << endl;
+	}
+	}
+
+int main(int argc, char* argv[]) {
+	int init, total, buffint;
+	string buf;
+	char c;
+	stringstream ss;
+	vector<char> states;
+	stack<int> transitions;
+	vector<int> final;
+
+		nfa2dfa converter;
+
+		cin.get(c);
+	while (!isdigit(c))
+		cin.get(c);
+	cin.putback(c);
+	cin >> init;
+	converter.set_initial(init);	
+		cin.get(c);
+	while (c != '{')
+		cin.get(c);
+	cin.get(c);
+	while (c != '}') {
+		if (isdigit(c)) {
+			cin.putback(c);
+			cin >> buffint;
+			final.push_back(buffint);
+			converter.add_final(buffint);
+		}
+		cin.get(c);
+	}
+
+		cin.get(c);
+	while (!isdigit(c))
+		cin.get(c);
+	cin.putback(c);
+	cin >> total;
+	converter.set_numstates(total);		
+		cin >> buf;
+	cin.get(c);
+	while (true) {
+		if (isalpha(c))
+			states.push_back(c);
+		else if (c == '\n')
+			break;
+		cin.get(c);
+	}
+	converter.set_inputs(states);	
+		for (int statenum=1; statenum<=total; statenum++) {
+		int actual_statenum;
+		getline(cin, buf);
+		ss << buf;
+		ss >> actual_statenum;	
+		for (int i=0; i<states.size(); i++) {
+			ss.get(c);
+			while (c != '{')
+				ss.get(c);
+			while (c != '}') {
+				if (isdigit(c)) {
+					ss.putback(c);
+					ss >> buffint;
+					converter.add_to_nfa(actual_statenum, states[i], buffint);					}
+				ss.get(c);
+			}
+		}
+		ss.clear();
+	}
+	
+		converter.convert();
+
+		converter.print_dfa();
+}
