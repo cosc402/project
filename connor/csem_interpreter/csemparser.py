@@ -30,114 +30,87 @@ class Parser(object):
 
   def p_prog(self, p):
     """prog : externs"""
-    print 'reduced to prog. Parsing completed successfully!'
     p[0] = Node('prog', p[1])
-    self.syntaxtree = SyntaxTree(p[0])
+    self.ast = SyntaxTree(p[0])
+    print 'reduced to {}. Parsing completed successfully!'.format(p[0])
 
   def p_externs(self, p):
     """externs :
                | externs extern"""
-    print 'reduced to externs'
-    if len(p) == 1:
-      p[0] = Node('externs')
-    else: p[0] = Node('externs', 0, p[1], p[2])
+    p[0] = Node('externs', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_extern(self, p):
     """extern : dcl ';'
               | func"""
-    print 'reduced to extern'
-    if len(p) == 3:
-      p[0] = Node('extern', 0, p[1], ';')
-    else: p[0] = Node('extern', 0, p[1])
+    p[0] = Node('extern', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_dcls(self, p):
     """dcls : 
             | dcls dcl ';'"""
-    print 'reduced to dcls'
-    if len(p) == 1:
-      p[0] = Node('dcls', 0)
-    else: p[0] = Node('dcls', 0, p[1], p[2], ';')
+    p[0] = Node('dcls', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_dcl(self, p):
     """dcl : type dclr
            | dcl ',' dclr"""
-    print 'reduced to dcl'
-    if len(p) == 3:
-      p[0] = Node('dcl', 0, p[1], p[2])
-    else: p[0] = Node('dcl', 0, p[1], ',', p[3])
+    p[0] = Node('dcl', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_dclr(self, p):
     """dclr : ID
             | ID '[' ']'
             | ID '[' ICON ']'"""
-    print 'reduced to dclr'
-    n = Node('ID', p[1])
-    if len(p) == 2:
-      p[0] = Node('dclr', 0, n)
-    elif len(p) == 4:
-      p[0] = Node('dclr', 0, n, '[', ']')
-    else: 
-      m = Node('ICON', p[3])
-      p[0] = Node('dclr', 0, n, '[', m, ']')
+    p[0] = Node('dclr', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_type(self, p):
     """type : CHAR
             | FLOAT
             | DOUBLE
             | INT"""
-    print 'reduced to type'
-    n = Node(csemlexer.Lexer.reserved[p[1]], p[1])
-    p[0] = Node('type', 0, n)
+    p[0] = Node('type', p[1])
+    print 'reduced to {}'.format(p[0])
 
   def p_func(self, p):
     """func : fhead stmts '}'"""
-    print 'reduced to func'
-    p[0] = Node('func', 0, p[1], p[2])
+    p[0] = Node('func', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_fhead(self, p):
     """fhead : fname fargs '{' dcls"""
-    print 'reduced to fhead'
-    p[0] = Node('fhead', 0, p[1], p[2], '{', p[4])
+    p[0] = Node('fhead', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_fname(self, p):
     """fname : type ID
              | ID"""
-    print 'reduced to fname'
-    if len(p) == 3:
-      n = Node('ID', p[2])
-      p[0] = Node('fname', 0, p[1], n)
-    else:
-      n = Node('ID', p[1])
-      p[0] = Node('fname', 0, n)
+    p[0] = Node('fname', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_fargs(self, p):
     """fargs : '(' ')'
              | '(' args ')'"""
-    print 'reduced to fargs'
-    if len(p) == 3:
-      p[0] = Node('fargs', 0, '(', ')')
-    else: p[0] = Node('fargs', 0, '(', p[2], ')')
+    p[0] = Node('fargs', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_args(self, p):
     """args : type dclr
             | args ',' type dclr"""
-    print 'reduced to args'
-    if len(p) == 3:
-      p[0] = Node('args', 0, p[1], p[2])
-    else: p[0] = Node('args', 0, p[1], ',', p[3], p[4])
+    p[0] = Node('args', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_block(self, p):
     """block : '{' stmts '}'"""
-    print 'reduced to block'
-    p[0] = Node('block', 0, '{', p[2], '}')
+    p[0] = Node('block', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_stmts(self, p):
     """stmts :
              | stmts stmt"""
-    print 'reduced to stmts'
-    if len(p) == 1:
-      p[0] = Node('stmts', 0)
-    else: p[0] = Node('stmts', 0, p[1], p[2])
+    p[0] = Node('stmts', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_stmt(self, p):
     """stmt : expr ';'
@@ -152,27 +125,14 @@ class Parser(object):
             | RETURN expr ';'
             | block
             | ';'"""
-    print 'reduced to stmt'
-    if p[1] == ';':                     # empty statement
-      p[0] = Node('stmt', 0, ';')
-    elif len(p) == 2:                   # block
-      p[0] = Node('stmt', 0, p[1])
-    elif len(p) == 3:
-      p[0] = Node('stmt', 0, p[1], ';')
-    elif len(p) == 4:
-      p[0] = Node('stmt', 0, p[1], p[2], ';')
-    elif len(p) == 6:
-      p[0] = Node('stmt', 0, p[1], '(', p[3], ')', p[5])
-    elif len(p) == 8:
-      if p[1].label == 'IF':
-        p[0] = Node('stmt', 0, p[1], '(', p[3], ')', p[5], p[6], p[7])
-      else:
-        pass
+    p[0] = Node('stmt', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_cexpro(self, p):
     """cexpro : 
               | cexpr"""
-    print 'reduced to cexpro'
+    p[0] = Node('cexpro', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_cexpr(self, p):
     """cexpr : expr EQ expr
@@ -185,17 +145,20 @@ class Parser(object):
              | cexpr LOR cexpr
              | '!' cexpr
              | expr"""
-    print 'reduced to cexpr'
+    p[0] = Node('cexpr', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_exprs(self, p):
     """exprs : expr
              | exprs ',' expr"""
-    print 'reduced to exprs'
+    p[0] = Node('exprs', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_expro(self, p):
     """expro : 
              | expr"""
-    print 'reduced to expro'
+    p[0] = Node('expro', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_expr(self, p):
     """expr : lval '=' expr
@@ -211,26 +174,29 @@ class Parser(object):
             | expr '%' expr
             | expr LSHIFT expr
             | expr RSHIFT expr
+            | ID '(' ')'
+            | ID '(' exprs ')'
             | '&' lval
             | '-' expr %prec UMINUS
             | lval %prec LVAL
-            | ID '(' ')'
-            | ID '(' exprs ')'
             | '(' expr ')'
             | constant"""
-    print 'reduced to expr'
+    p[0] = Node('expr', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_lval(self, p):
     """lval : ID
             | ID '[' expr ']'"""
-    print 'reduced to lval'
+    p[0] = Node('lval', *p[1:])
+    print 'reduced to {}'.format(p[0])
 
   def p_constant(self, p):
     """constant : SCON
                 | ICON
                 | CCON
                 | FCON"""
-    print 'reduced to constant'
+    p[0] = Node('constant', p[1])
+    print 'reduced to {}'.format(p[0])
 
   ################################
   # END OF GRAMMAR SPECIFICATION #

@@ -1,7 +1,16 @@
 import viserror
 
+# VALID STRING TYPE CODES FOR SYMBOLS:
+#
+# INT
+# FLOAT (or double)
+# STRING (or char)
+# FSTREAM
+# SSTREAM
+# COUT
+# CIN
+#
 class Symbol:
-
   def __init__(self, name, _type, value=None):
     self.value = value
     self.type = _type
@@ -37,7 +46,7 @@ class Env:
     else:
       print '**VisError**: {} does not exist in symbol table'
 
-  def print_table(self):
+  def printTable(self):
     print 'Symbol table:'
     for sym in self.table.values():
       print sym
