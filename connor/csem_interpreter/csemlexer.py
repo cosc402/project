@@ -1,7 +1,8 @@
 import ply.lex as lex
 from ply.lex import TOKEN
 import sys
-from node import *
+from syntax import *
+import symbol as sym
 
 class Lexer(object):
   # t.value will have the form
@@ -91,7 +92,8 @@ class Lexer(object):
   #
   @TOKEN(r'"(' + escape_sequence + r'|[^"\\\n])*"')
   def t_SCON(self, t):
-    t.value = Node('SCON', value=t.value[1:-1])
+    s = sym.StringSymbol(None, t.value[1:-1])
+    t.value = Node('SCON', value=s)
     return t
 
   # ID
@@ -104,6 +106,12 @@ class Lexer(object):
   def t_ID(self, t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
     t.type = self.reserved.get(t.value, 'ID')
+    if t.type == 'INT':
+      t.value = sym.IntSymbol
+    elif t.type == 'CHAR' or t.type == 'STRING':
+      t.value = sym.StringSymbol
+    elif t.type == 'FLOAT' or t.type == 'DOUBLE':
+      t.value = sym.FloatSymbol
     t.value = Node(t.type, value=t.value)
     return t
 
@@ -114,7 +122,8 @@ class Lexer(object):
   @TOKEN(decimal_literal + r'|' + octal_literal + r'|' + hexadecimal_literal)
   def t_ICON(self, t):
     # to do: handle octal and hex cases
-    t.value = Node('ICON', value=int(t.value))
+    s = sym.IntSymbol(None, int(t.value))
+    t.value = Node('ICON', value=s)
     return t
 
   # CCON
@@ -123,7 +132,8 @@ class Lexer(object):
   #
   @TOKEN(r"'(" + escape_sequence + r"|[^'\\\n])+'")
   def t_CCON(self, t):
-    t.value = Node('CCON', value=t.value[1:-1])
+    s = sym.StringSymbol(None, t.value[1:-1])
+    t.value = Node('CCON', value=s)
     return t
 
   # FCON
@@ -133,7 +143,8 @@ class Lexer(object):
   @TOKEN(r'(' + fractional_constant + exponent_part + r'?)|([0-9]+' + exponent_part + r')')
   def t_FCON(self, t):
     # to do: handle exp cases (will it automatically?)
-    t.value = float(t.value)
+    s = sym.FloatSymbol(None, float(t.value))
+    t.value = Node('FCON', value=s)
     return t
 
   t_ignore = ' \t'

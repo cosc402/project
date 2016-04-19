@@ -3,13 +3,17 @@ import viserror
 import symbol
 import ply.yacc as yacc
 import sys
-from node import *
+from syntax import *
+
+# global
+global DEBUG
 
 class Parser(object):
   def __init__(self, toklist):
     self.headsym = symbol.Env()
     self.cursym = None
     self.tokens = toklist
+    self.ast = None         # this member is set to the root of the AST after parsing
 
   precedence = (
     ('right', 'LVAL'),
