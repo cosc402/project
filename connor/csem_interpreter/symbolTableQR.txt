@@ -1,0 +1,74 @@
+Abstract Symbol Class Structure:
+* id
+    - variable name
+* value
+    - variable value
+* type
+    - value type (int, float, etc.), this is given by interpreter
+methods:
+* __str__ 
+    - returns values
+* update(new_value)
+    - updates the value
+
+
+The Abstract Symbol Class is not needed to be used. Derived classes Implement the Symbol class through each of the following methods:
+
+update(value)
+ - updates the symbol's value
+oper(op_code, rhs)
+ - overloads the operator given by op_code. Returns derived symbol type with new value
+
+For each derived class the argument id represents the name of the variable, value represents its respective value (e.g. int is and digit value), and type is a string representing that type (i.e. int, float, char, bool)
+
+op_code can be any of the following character values:
+'==' '!=' '<=' '>=' '<' '>' '&&' '||'
+'+' '-' '*' '/' '%' '=' '+=' '-=' '*=' '/=' '%='
+
+Type is automatically declared by the derived class.
+
+DERIVED CLASSES:
+
+* IntSymbol(Symbol)
+ - init function [IntSymbol(id, value)]
+    value is default to 0
+ - perform operation [oper(op_code, rhs)] 
+    rhs is default to None
+
+* FloatSymbol(Symbol)
+ - init function [FloatSymbol(id, value)]
+    value is default to 0.0
+ - perform operation [oper(op_code, rhs)] 
+    rhs is default to None
+
+* CharSymbol(Symbol)
+ - init function [CharSymbol(id, value)]
+    value is default to ''
+
+* StringSymbol(Symbol)
+ - init function [StringSymbol(id,value)]
+    value default to ''
+ - perform operation [oper(op_code, rhs)]
+    rhs limited to +, =, += as of 5-26-16
+
+* VectorSymbol(Symbol)
+ - init function [VectorSymbol(id, kwargs)]
+    kwargs is a list and the vector dimension is set from here
+ - operations not implemented yet
+ - length()
+
+* FunctionSymbol(Symbol)
+ - init [FunctionSymbol(id, kwargs)]
+    value given should be a pointer to the node that begins the first statement
+ - operations not implemented
+ - __str__ returns function data
+
+
+
+* Env()
+ - this is used to create environment table that holds symbol tables for varying scopes
+ - put(name,symobj)
+    places a new symbol object in has table based on the env name
+ - get(name)
+    returns the symbol table that is hashed on the given name
+
