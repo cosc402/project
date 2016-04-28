@@ -1,12 +1,12 @@
+# gloabl
+DEBUG = False
+
 import symbol
 import viserror
 import csemlexer
 import csemparser
 import sys
 from syntax import *
-
-# gloabl
-DEBUG = True
 
 def main():
   if len(sys.argv) != 2:
@@ -22,9 +22,10 @@ def main():
   parser.parse(fin.read())
 
   ast = parser.ast
-  ast.printTree()
+  if DEBUG: ast.printTree()
 
   ast.init()
+  ast.execute()
 
 if __name__ == '__main__':
   main()

@@ -6,7 +6,7 @@ import sys
 from syntax import *
 
 # global
-global DEBUG
+DEBUG = False
 
 class Parser(object):
   def __init__(self, toklist):
@@ -36,38 +36,38 @@ class Parser(object):
     """prog : externs"""
     p[0] = Node('prog', p[1])
     self.ast = SyntaxTree(p[0])
-    print 'reduced to {}. Parsing completed successfully!'.format(p[0])
+    if DEBUG: print 'reduced to {}. Parsing completed successfully!'.format(p[0])
 
   def p_externs(self, p):
     """externs :
                | externs extern"""
     p[0] = Node('externs', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_extern(self, p):
     """extern : dcl ';'
               | func"""
     p[0] = Node('extern', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_dcls(self, p):
     """dcls : 
             | dcls dcl ';'"""
     p[0] = Node('dcls', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_dcl(self, p):
     """dcl : type dclr
            | dcl ',' dclr"""
     p[0] = Node('dcl', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_dclr(self, p):
     """dclr : ID
             | ID '[' ']'
             | ID '[' ICON ']'"""
     p[0] = Node('dclr', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_type(self, p):
     """type : CHAR
@@ -75,46 +75,46 @@ class Parser(object):
             | DOUBLE
             | INT"""
     p[0] = Node('type', p[1])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_func(self, p):
     """func : fhead stmts '}'"""
     p[0] = Node('func', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_fhead(self, p):
     """fhead : fname fargs '{' dcls"""
     p[0] = Node('fhead', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_fname(self, p):
     """fname : type ID
              | ID"""
     p[0] = Node('fname', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_fargs(self, p):
     """fargs : '(' ')'
              | '(' args ')'"""
     p[0] = Node('fargs', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_args(self, p):
     """args : type dclr
             | args ',' type dclr"""
     p[0] = Node('args', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_block(self, p):
     """block : '{' stmts '}'"""
     p[0] = Node('block', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_stmts(self, p):
     """stmts :
              | stmts stmt"""
     p[0] = Node('stmts', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_stmt(self, p):
     """stmt : expr ';'
@@ -130,13 +130,13 @@ class Parser(object):
             | block
             | ';'"""
     p[0] = Node('stmt', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_cexpro(self, p):
     """cexpro : 
               | cexpr"""
     p[0] = Node('cexpro', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_cexpr(self, p):
     """cexpr : expr EQ expr
@@ -150,19 +150,19 @@ class Parser(object):
              | '!' cexpr
              | expr"""
     p[0] = Node('cexpr', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_exprs(self, p):
     """exprs : expr
              | exprs ',' expr"""
     p[0] = Node('exprs', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_expro(self, p):
     """expro : 
              | expr"""
     p[0] = Node('expro', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_expr(self, p):
     """expr : lval '=' expr
@@ -186,13 +186,13 @@ class Parser(object):
             | '(' expr ')'
             | constant"""
     p[0] = Node('expr', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_lval(self, p):
     """lval : ID
             | ID '[' expr ']'"""
     p[0] = Node('lval', *p[1:])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   def p_constant(self, p):
     """constant : SCON
@@ -200,7 +200,7 @@ class Parser(object):
                 | CCON
                 | FCON"""
     p[0] = Node('constant', p[1])
-    print 'reduced to {}'.format(p[0])
+    if DEBUG: print 'reduced to {}'.format(p[0])
 
   ################################
   # END OF GRAMMAR SPECIFICATION #

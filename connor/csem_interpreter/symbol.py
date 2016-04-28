@@ -31,8 +31,12 @@ import viserror
 class Symbol:
   def __init__(self, id, value=None):
     self.id = id
-    self.value = value
+    self.value = value              # This is a value that may change during execution.
+                                    # First pass should put all declarations into the symbol table
+                                    # with value `None'.
     self.type = None
+    self.init_value = None          # This is the value stored by the first-pass intializer.
+                                    # It is not a good idea to modify this during execution.
 
   def __str__(self):
     return '{} ({}): {}'.format(self.id, self.type, self.value)
@@ -44,36 +48,46 @@ class Symbol:
   # AST in syntax.py to figure out how to evaluate expressions.
   # When checking the type of `rhs', just be sure to check
   # what class `rhs' is an instance of. It should be an instance
-  # of a class XXXSymbol.
+  # of some XXXSymbol class.
   #
   # If rhs = None, then treat op_code as a unary operation.
   def oper(self, op_code, rhs=None):
     pass
 
+  # Override this. This function should return this symbol's Python boolean value.
+  def boolean(self):
+    pass
+
 class IntSymbol(Symbol):
-  def __init__(self, id, value=0):
+  def __init__(self, id, value=None):
     Symbol.__init__(self, id, value)
     self.type = 'int'
+
+  def boolean(self):
+    return bool(self.value)
 
   def oper(self, op_code, rhs=None):
     # int relop any
     if rhs != None:
       if op_code == '==':
-        return IntSymbol(None, self.value == rhs.value)
+        #return IntSymbol(None, self.value == rhs.value)
+        # I decided instead to use Python True/False values. Make a note that
+        # all oper() calls with relational operators return Python boolean.
+        return self.value == rhs.value
       if op_code == '!=':
-        return IntSymbol(None, self.value != rhs.value)
+        return self.value != rhs.value
       if op_code == '<=':
-        return IntSymbol(None, self.value <= rhs.value)
+        return self.value <= rhs.value
       if op_code == '>=':
-        return IntSymbol(None, self.value >= rhs.value)
+        return self.value >= rhs.value
       if op_code == '<':
-        return IntSymbol(None, self.value < rhs.value)
+        return self.value < rhs.value
       if op_code == '>':
-        return IntSymbol(None, self.value > rhs.value)
+        return self.value > rhs.value
       if op_code == '&&':
-        return IntSymbol(None, self.value and rhs.value)
+        return self.boolean() and rhs.boolean()
       if op_code == '||':
-        return IntSymbol(None, self.value or rhs.value)
+        return self.boolean() or rhs.boolean()
 
     # int op int
     if isinstance(rhs, IntSymbol):
@@ -133,29 +147,35 @@ class IntSymbol(Symbol):
     return None
 
 class FloatSymbol(Symbol):
-  def __init__(self, id, value=0.0):
+  def __init__(self, id, value=None):
     Symbol.__init__(self, id, value)
     self.type = 'float'
+
+  def boolean(self):
+    return bool(self.value)
 
   def oper(self, op_code, rhs):
     # float relop any
     if rhs != None:
       if op_code == '==':
-        return IntSymbol(None, self.value == rhs.value)
+        #return IntSymbol(None, self.value == rhs.value)
+        # I decided instead to use Python True/False values. Make a note that
+        # all oper() calls with relational operators return Python boolean.
+        return self.value == rhs.value
       if op_code == '!=':
-        return IntSymbol(None, self.value != rhs.value)
+        return self.value != rhs.value
       if op_code == '<=':
-        return IntSymbol(None, self.value <= rhs.value)
+        return self.value <= rhs.value
       if op_code == '>=':
-        return IntSymbol(None, self.value >= rhs.value)
+        return self.value >= rhs.value
       if op_code == '<':
-        return IntSymbol(None, self.value < rhs.value)
+        return self.value < rhs.value
       if op_code == '>':
-        return IntSymbol(None, self.value > rhs.value)
+        return self.value > rhs.value
       if op_code == '&&':
-        return IntSymbol(None, self.value and rhs.value)
+        return self.boolean() and rhs.boolean()
       if op_code == '||':
-        return IntSymbol(None, self.value or rhs.value)
+        return self.boolean() or rhs.boolean()
 
     # float op int/float
     if isinstance(rhs, IntSymbol) or isinstance(rhs, FloatSymbol):
@@ -205,14 +225,17 @@ class FloatSymbol(Symbol):
 
 # i don't think i'll need char, but just in case...
 class CharSymbol(Symbol):
-  def __init__(self, id, value=''):
+  def __init__(self, id, value=None):
     Symbol.__init__(self, id, value)
     self.type = 'char'
 
 class StringSymbol(Symbol):
-  def __init__(self, id, value=''):
+  def __init__(self, id, value=None):
     Symbol.__init__(self, id, value)
     self.type = 'string'
+
+  def boolean(self):
+    return None
 
   def oper(self, op_code, rhs):
     # string op string
@@ -254,6 +277,9 @@ class VectorSymbol(Symbol):
     self.contains = kwargs.get('contains', IntSymbol)
     self.type = 'VECTOR({}, {})'.format(self.dim, self.contains)
 
+  def boolean(self):
+    return None
+
   def oper(self, op_code, rhs=None):
     pass
 
@@ -280,11 +306,14 @@ class FunctionSymbol(Symbol):
     return '{} (function, {}) {}: {}'.format(
       self.id, self.return_type, self.args, self.value)
 
-  # when a function is called and is used in an expression, the
+  def boolean(self):
+    return None
+
+  # when a function's return value is used in an expression, the
   # interpreter's responsibility is to use the operation defined
   # by self.return_type. For instance, if this FunctionSymbol is
   # int max(int a, int b), then the interpreter will simply call
-  # IntSymbol.oper(), or something like that.
+  # IntSymbol.oper().
   def oper(self, op_code, rhs=None):
     pass
 
@@ -293,8 +322,10 @@ class Env:
     # Symbol table (one scope)
     self.table = {}
 
-  def put(self, name, symobj):
-    if name in self.table:
+  # Put an entry into this symbol table. If force = True, then overwrite
+  # data if the identifier is already declared.
+  def put(self, name, symobj, force=False):
+    if name in self.table and not force:
       raise viserror.VisError('Identifier {} already declared'.format(name))
     self.table[name] = symobj
 

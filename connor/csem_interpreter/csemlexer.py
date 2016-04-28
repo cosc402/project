@@ -23,6 +23,7 @@ class Lexer(object):
     'return'   : 'RETURN'
   }
 
+  # These are what you would expect from the PLY LexToken documentation.
   literals = [
     ';', ',', '[', ']', '}', '{', '(', ')',
     ':', '<', '>', '!', '=', '*', '/', '%',
@@ -51,11 +52,12 @@ class Lexer(object):
   # the parser is able to interpret the value according to
   # the value's associated data type. If the parser sees a string
   # instead of a Node for a value, the parser will interpret the
-  # string as a literal. For example, if t is a token, then
-  # t.value is
+  # string as a literal. Lexing examples:
   #
   #      int i;    ==>   Node('INT', 'int'), Node('ID', 'i')
-  #      i += 5;   ==>   Node('ID', 'i'), '+=', Node('ICON', 5)
+  #      i += 5;   ==>   Node('ID', 'i'), 
+  #                      LexToken('ADDEQ', '+='),
+  #                      Node('ICON', 5)
   #
   tokens = [
     'SCON',   # string literal
@@ -99,9 +101,10 @@ class Lexer(object):
   # ID
   #
   # This pattern also matches reserved keywords. If a keyword is matched,
-  # the token returned has t.type modified accordingly.
+  # the token returned has t.type modified accordingly. t.value is the
+  # matched pattern in this case. For instance: Node(label='FOR', value='for')
   #
-  # In any case, t.value = Node(type, value = matched pattern).
+  # If a keyword is not matched, then t.value = Node(type, value = matched pattern).
   #
   def t_ID(self, t):
     r'[a-zA-Z_][a-zA-Z0-9_]*'
