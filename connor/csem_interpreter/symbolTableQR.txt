@@ -66,9 +66,9 @@ DERIVED CLASSES:
 
 
 * Env()
- - this is used to create environment table that holds symbol tables for varying scopes
+ - this is used to create symbol table that holds symbols for varying scopes
  - put(name,symobj)
-    places a new symbol object in has table based on the env name
+    places a new symbol object in table based on the env name
  - get(name)
-    returns the symbol table that is hashed on the given name
+    returns the symbol that is hashed on the given name
 
