@@ -1,6 +1,10 @@
 class VisError(Exception):
   '''Base class for Visualizer exceptions.'''
-  pass
+  def __init__(self, value='VisError'):
+    self.value = value
+
+  def __str__(self):
+    return str(self.value)
 
 class VisTypeError(VisError):
   '''Exception raised for type errors.

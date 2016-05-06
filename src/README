@@ -1,1 +1,9 @@
-Run 'python vis.py'
+Run 'python csemterpreter.py [input file]' to execute interpreter
+
+* csemlexer.py contains lexical analyzer code
+* csemparser.py contains grammar and syntax analyzer code
+* symbol.py contains methods for creating a symbol and a single symbol table
+* syntax.py contains methods for creating syntax tree structure with multiple symbol tables
+* delete_comment.py is a python version of the preprocessor script
+
+
